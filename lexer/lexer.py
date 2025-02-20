@@ -75,7 +75,11 @@ class Lexer:
             self.advance()
         if result == "true":
             return Tolkien(TOLKIEN_TYPES["BOOLEAN"], True)
+        elif result == "goth":
+            return Tolkien(TOLKIEN_TYPES["BOOLEAN"], True)
         elif result == "false":
+            return Tolkien(TOLKIEN_TYPES["BOOLEAN"], False)
+        elif result == "burzum":
             return Tolkien(TOLKIEN_TYPES["BOOLEAN"], False)
         else:
             raise Exception(f"The Eye does not recognize this: {result}")
@@ -92,24 +96,44 @@ class Lexer:
                 for _ in range(4):
                     self.advance()
                 return Tolkien(TOLKIEN_TYPES["BOOLEAN"], True)
+            
+            if self.text[self.pos].startswith("goth"):
+                for _ in range(4):
+                    self.advance()
+                return Tolkien(TOLKIEN_TYPES["BOOLEAN"], True)
 
             if self.text[self.pos].startswith("false"):
                 for _ in range(5):
                     self.advance()
                 return Tolkien(TOLKIEN_TYPES["BOOLEAN"], False)
+            
+            if self.text[self.pos].startswith("burzum"):
+                for _ in range(6):
+                    self.advance()
+                return Tolkien(TOLKIEN_TYPES["BOOLEAN"], False)
 
             if self.text[self.pos : self.pos + 3] == "agh":
-                for _ in range(3):  # Advance 'a', 'g', 'h'
+                for _ in range(3):
                     self.advance()
                 return Tolkien(TOLKIEN_TYPES["AND"], "agh")
+            
+            if self.text[self.pos : self.pos + 3] == "and":
+                for _ in range(3): 
+                    self.advance()
+                return Tolkien(TOLKIEN_TYPES["AND"], "and")
 
             if self.text[self.pos : self.pos + 2] == "or":
-                for _ in range(2):  # Advance 'o', 'r'
+                for _ in range(2): 
                     self.advance()
                 return Tolkien(TOLKIEN_TYPES["OR"], "or")
+            
+            if self.text[self.pos : self.pos + 3] == "urz":
+                for _ in range(3): 
+                    self.advance()
+                return Tolkien(TOLKIEN_TYPES["OR"], "urz")
 
             if self.text[self.pos : self.pos + 3] == "not":
-                for _ in range(3):  # Advance 'n', 'o', 't'
+                for _ in range(3):
                     self.advance()
                 return Tolkien(TOLKIEN_TYPES["NOT"], "not")
 

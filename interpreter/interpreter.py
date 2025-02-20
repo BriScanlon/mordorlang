@@ -61,7 +61,11 @@ class Interpreter:
 
         if node.op == 'agh':
             return left_value and right_value
+        elif node.op == 'and':
+            return left_value and right_value
         elif node.op == 'or':
+            return left_value or right_value
+        elif node.op == 'urz':
             return left_value or right_value
         else:
             raise Exception(f"Unknown logical operator: {node.op}")

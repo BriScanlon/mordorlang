@@ -1,3 +1,12 @@
 true agh (-5 + 3 * (10 - 2)) == false;
 5 + 3 * 2 == 11 or not false;
 (10 / 2) + 3 <= 8 agh true;
+-5 * -5;
+-5;
+10 - 5;
+-(5 + 3);
+5 + -3;
+-(-10);
+!true agh false;
+!true and false;
+goth urz burzum;

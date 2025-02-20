@@ -40,7 +40,7 @@ class Parser:
         """
         expressions = []
         while self.current_tolkien.type != "EOF":
-            node = self.logical_expr()  # ✅ Top-level entry point reflecting proper precedence
+            node = self.logical_expr()
             self.eat("SEMI")
             expressions.append(node)
         return expressions
