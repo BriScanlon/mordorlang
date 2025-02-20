@@ -96,6 +96,10 @@ class Lexer:
                     result += "\n"
                 elif self.current_char == '"':
                     result += '"'
+                elif self.current_char == "t":
+                    result += "\t"
+                elif self.current_char == '"':
+                    result += '"'
                 else:
                     result = self.current_char
             else:
@@ -159,10 +163,6 @@ class Lexer:
                 for _ in range(3):
                     self.advance()
                 return Tolkien(TOLKIEN_TYPES["NOT"], "not")
-
-            if self.text[self.pos].startswith("!"):
-                self.advance()
-                return Tolkien(TOLKIEN_TYPES["NOT"], "not")
             
             if self.current_char == '"':
                 return self.string()
@@ -185,9 +185,8 @@ class Lexer:
                 if self.current_char == "=":
                     self.advance()
                     return Tolkien(TOLKIEN_TYPES["NEQ"], "!=")
-                raise Exception(
-                    f"Saruman speaks lies: '{self.current_char}' not valid here."
-                )
+                else:
+                    return Tolkien(TOLKIEN_TYPES["NOT"], "not")
 
             if self.current_char == "<":
                 self.advance()

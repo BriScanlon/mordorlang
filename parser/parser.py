@@ -48,13 +48,16 @@ class Parser:
 
     
     def expr(self):
-        # expr → term ((PLUS | MINUS) term)*
+        # expr → term ((PLUS | MINUS) term)*, handling strings and numbers
         node = self.term()
         while self.current_tolkien.type in ("PLUS", "MINUS"):
             tolkien = self.current_tolkien
             self.eat(tolkien.type)
-            node = BinaryOp(left=node, op=tolkien.value, right=self.term())
+            right_node = self.term()
+            node = BinaryOp(left=node, op=tolkien.value, right=right_node)
+
         return node
+
 
     def term(self):
         # term → unary_expr ((MULT | DIV) unary_expr)*

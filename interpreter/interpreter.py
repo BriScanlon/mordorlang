@@ -16,10 +16,10 @@ class Interpreter:
         return node.value
 
     def visit_BinaryOp(self, node: Boolean):
-        #Evaluate BinaryOp nodes based on their operation (+, -, *, /).
+        # Evaluate BinaryOp nodes based on their operation (+, -, *, /).
         left_value = self.visit(node.left)
         right_value = self.visit(node.right)
-        
+
         if node.op == '+':
             # Handle both number addition and string concatenation
             if isinstance(left_value, str) or isinstance(right_value, str):
@@ -35,6 +35,7 @@ class Interpreter:
             return left_value / right_value
         else:
             raise Exception(f"Unknown operator: {node.op}")
+
 
     def visit_Boolean(self, node):
         return node.value
