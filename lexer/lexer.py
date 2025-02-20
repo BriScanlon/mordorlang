@@ -21,6 +21,8 @@ TOLKIEN_TYPES = {
     "GT": "GT",
     "LTE": "LTE",
     "GTE": "GTE",
+    "STRING": "STRING",
+    "CONCAT": "CONCAT",
     "EOF": "EOF",
 }
 
@@ -83,6 +85,27 @@ class Lexer:
             return Tolkien(TOLKIEN_TYPES["BOOLEAN"], False)
         else:
             raise Exception(f"The Eye does not recognize this: {result}")
+    
+    def string(self):
+        result = ''
+        self.advance()
+        while self.current_char is not None and self.current_char != '"':
+            if self.current_char == "\\":
+                self.advance()
+                if self.current_char == "n":
+                    result += "\n"
+                elif self.current_char == '"':
+                    result += '"'
+                else:
+                    result = self.current_char
+            else:
+                result += self.current_char
+            self.advance()
+        if self.current_char != '"':
+            raise Exception("The way is open, close the string literal!")
+        self.advance()
+        return Tolkien(TOLKIEN_TYPES["STRING"], result)
+        
 
     def get_next_tolkien(self):
         # Analyse and break our input down into Tolkiens
@@ -140,6 +163,9 @@ class Lexer:
             if self.text[self.pos].startswith("!"):
                 self.advance()
                 return Tolkien(TOLKIEN_TYPES["NOT"], "not")
+            
+            if self.current_char == '"':
+                return self.string()
 
             if self.current_char.isdigit():
                 return self.number()

@@ -19,8 +19,11 @@ class Interpreter:
         #Evaluate BinaryOp nodes based on their operation (+, -, *, /).
         left_value = self.visit(node.left)
         right_value = self.visit(node.right)
-
+        
         if node.op == '+':
+            # Handle both number addition and string concatenation
+            if isinstance(left_value, str) or isinstance(right_value, str):
+                return str(left_value) + str(right_value)
             return left_value + right_value
         elif node.op == '-':
             return left_value - right_value
@@ -79,3 +82,6 @@ class Interpreter:
             return -operand_value  # Negation of the number
         else:
             raise Exception(f"Unknown unary operator: {node.op}")
+        
+    def visit_String(self, node):
+        return node.value

@@ -51,3 +51,10 @@ class UnaryOp:
 
     def __repr__(self):
         return f"UnaryOp({self.op}, {self.operand})"
+
+class String:
+    def __init__(self, value):
+        self.value = value
+
+    def __repr__(self):
+        return f'String("{self.value}")'

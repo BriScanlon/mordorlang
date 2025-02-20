@@ -3,3 +3,8 @@ burzum urz burzum;
 5 > 3;
 -9 * 8921;
 (8 * 8) * 392;
+"Hello, world!";
+"Hello, " + "MordorLang!";
+"Line1\nLine2";
+"Value: " + 42;
+"Escape: \"" + "Quote";

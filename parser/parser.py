@@ -6,6 +6,7 @@ from abstract_syntax_tree.nodes import (
     CompareOp,
     LogicalOp,
     UnaryOp,
+    String
 )
 
 
@@ -92,6 +93,9 @@ class Parser:
             node = self.comparison()
             self.eat("RPAREN")
             return node
+        elif tolkien.type == "STRING":
+            self.eat("STRING")
+            return String(tolkien.value)
         else:
             self.error("NUMBER, BOOLEAN, MINUS or LPAREN")
 
