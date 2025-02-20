@@ -35,12 +35,12 @@ class Parser:
 
     def program(self):
         """
-        program → (expr SEMI)* EOF
+        program → (unary_expr SEMI)* EOF
         Handles multiple expressions separated by semicolons.
         """
         expressions = []
         while self.current_tolkien.type != "EOF":
-            node = self.logical_expr()
+            node = self.unary_expr()  # Changed from logical_expr to unary_expr
             self.eat("SEMI")
             expressions.append(node)
         return expressions
@@ -74,22 +74,19 @@ class Parser:
         return node
 
     def comparison(self):
-        # comparison → expr ( (== | != | < | <= | > | >=) expr )*
-        node = self.expr()
+        # comparison → unary_expr ( (== | != | < | <= | > | >=) unary_expr )*
+        node = self.unary_expr()
         while self.current_tolkien.type in ("EQ", "NEQ", "LT", "LTE", "GT", "GTE"):
             tolkien = self.current_tolkien
             self.eat(tolkien.type)
-            node = CompareOp(left=node, op=tolkien.value, right=self.expr())
+            node = CompareOp(left=node, op=tolkien.value, right=self.unary_expr())
         return node
 
     def factor(self):
         # factor -> NOT factor | NUMBER | BOOLEAN | LPAREN comparison RPAREN
-        # Handles unary NOT, Booleans, numbers and parentheses. 
+        # Handles Booleans, numbers and parentheses.
         tolkien = self.current_tolkien
 
-        if tolkien.type == "NOT":
-            self.eat("NOT")
-            return UnaryOp(op="NOT", operand=self.factor())
         if tolkien.type == "BOOLEAN":
             self.eat("BOOLEAN")
             return Boolean(tolkien.value)
@@ -114,3 +111,11 @@ class Parser:
             node = LogicalOp(left=node, op=tolkien.value, right=self.comparison())
 
         return node
+
+    def unary_expr(self):
+        # unary_expr -> NOT unary_expr | factor
+        if self.current_tolkien.type == "NOT":
+            tolkien = self.current_tolkien
+            self.eat("NOT")
+            return UnaryOp(op=tolkien.value, operand=self.unary_expr())
+        return self.factor()

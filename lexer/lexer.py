@@ -87,27 +87,32 @@ class Lexer:
             if self.current_char.isspace():
                 self.skip_whitecity_space()
                 continue
-            
+
             if self.text[self.pos].startswith("true"):
-                for _ in range(4): self.advance()
+                for _ in range(4):
+                    self.advance()
                 return Tolkien(TOLKIEN_TYPES["BOOLEAN"], True)
-            
+
             if self.text[self.pos].startswith("false"):
-                for _ in range(5): self.advance()
+                for _ in range(5):
+                    self.advance()
                 return Tolkien(TOLKIEN_TYPES["BOOLEAN"], False)
-            
-            if self.text[self.pos].startswith("agh"):
-                for _ in range(3): self.advance()
+
+            if self.text[self.pos : self.pos + 3] == "agh":
+                for _ in range(3):  # Advance 'a', 'g', 'h'
+                    self.advance()
                 return Tolkien(TOLKIEN_TYPES["AND"], "agh")
-            
+
             if self.text[self.pos].startswith("or"):
-                for _ in range(2): self.advance()
+                for _ in range(2):
+                    self.advance()
                 return Tolkien(TOLKIEN_TYPES["OR"], "or")
-            
+
             if self.text[self.pos].startswith("not"):
-                for _ in range(3): self.advance()
+                for _ in range(3):
+                    self.advance()
                 return Tolkien(TOLKIEN_TYPES["NOT"], "not")
-            
+
             if self.text[self.pos].startswith("!"):
                 self.advance()
                 return Tolkien(TOLKIEN_TYPES["NOT"], "not")
