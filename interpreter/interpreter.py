@@ -66,10 +66,12 @@ class Interpreter:
         else:
             raise Exception(f"Unknown logical operator: {node.op}")
 
-    def visit_uniaryOp(self, node):
+    def visit_UnaryOp(self, node):
         operand_value = self.visit(node.operand)
         
-        if node.op == 'NOT':
+        if node.op == 'not':
             return not operand_value
+        elif node.op == '-':
+            return -operand_value  # Negation of the number
         else:
             raise Exception(f"Unknown unary operator: {node.op}")

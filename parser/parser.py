@@ -35,59 +35,53 @@ class Parser:
 
     def program(self):
         """
-        program → (unary_expr SEMI)* EOF
-        Handles multiple expressions separated by semicolons.
+        program → (logical_expr SEMI)* EOF
+        Handles multiple logical, comparison, and arithmetic expressions separated by semicolons.
         """
         expressions = []
         while self.current_tolkien.type != "EOF":
-            node = self.unary_expr()  # Changed from logical_expr to unary_expr
+            node = self.logical_expr()  # ✅ Top-level entry point reflecting proper precedence
             self.eat("SEMI")
             expressions.append(node)
         return expressions
 
+    
     def expr(self):
-        """
-        expr → term ((PLUS | MINUS) term)*
-        Handles addition and subtraction.
-        """
+        # expr → term ((PLUS | MINUS) term)*
         node = self.term()
-
         while self.current_tolkien.type in ("PLUS", "MINUS"):
             tolkien = self.current_tolkien
             self.eat(tolkien.type)
             node = BinaryOp(left=node, op=tolkien.value, right=self.term())
-
         return node
 
     def term(self):
-        """
-        term → factor ((MULT | DIV) factor)*
-        Handles multiplication and division.
-        """
-        node = self.factor()
-
+        # term → unary_expr ((MULT | DIV) unary_expr)*
+        node = self.unary_expr()
         while self.current_tolkien.type in ("MULTI", "DIV"):
             tolkien = self.current_tolkien
             self.eat(tolkien.type)
-            node = BinaryOp(left=node, op=tolkien.value, right=self.factor())
-
+            node = BinaryOp(left=node, op=tolkien.value, right=self.unary_expr())
         return node
 
     def comparison(self):
-        # comparison → unary_expr ( (== | != | < | <= | > | >=) unary_expr )*
-        node = self.unary_expr()
+        # comparison → expr ( (== | != | < | <= | > | >=) expr )*
+        node = self.expr()
         while self.current_tolkien.type in ("EQ", "NEQ", "LT", "LTE", "GT", "GTE"):
             tolkien = self.current_tolkien
             self.eat(tolkien.type)
-            node = CompareOp(left=node, op=tolkien.value, right=self.unary_expr())
+            node = CompareOp(left=node, op=tolkien.value, right=self.expr())
         return node
 
     def factor(self):
         # factor -> NOT factor | NUMBER | BOOLEAN | LPAREN comparison RPAREN
         # Handles Booleans, numbers and parentheses.
         tolkien = self.current_tolkien
-
-        if tolkien.type == "BOOLEAN":
+        
+        if tolkien.type == "MINUS":
+            self.eat("MINUS")
+            return UnaryOp(op="-", operand=self.factor())
+        elif tolkien.type == "BOOLEAN":
             self.eat("BOOLEAN")
             return Boolean(tolkien.value)
         elif tolkien.type == "NUMBER":
@@ -99,10 +93,10 @@ class Parser:
             self.eat("RPAREN")
             return node
         else:
-            self.error("NUMBER, BOOLEAN, or LPAREN")
+            self.error("NUMBER, BOOLEAN, MINUS or LPAREN")
 
     def logical_expr(self):
-        # logical_expr -> comparison ( (AND | OR) comparison )* - Handles logical AND (agh) and OR (or) operations.
+        # logical_expr → comparison ( (AND | OR) comparison )*
         node = self.comparison()
 
         while self.current_tolkien.type in ("AND", "OR"):
@@ -113,7 +107,7 @@ class Parser:
         return node
 
     def unary_expr(self):
-        # unary_expr -> NOT unary_expr | factor
+        # unary_expr → NOT unary_expr | factor
         if self.current_tolkien.type == "NOT":
             tolkien = self.current_tolkien
             self.eat("NOT")

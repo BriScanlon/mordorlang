@@ -103,13 +103,13 @@ class Lexer:
                     self.advance()
                 return Tolkien(TOLKIEN_TYPES["AND"], "agh")
 
-            if self.text[self.pos].startswith("or"):
-                for _ in range(2):
+            if self.text[self.pos : self.pos + 2] == "or":
+                for _ in range(2):  # Advance 'o', 'r'
                     self.advance()
                 return Tolkien(TOLKIEN_TYPES["OR"], "or")
 
-            if self.text[self.pos].startswith("not"):
-                for _ in range(3):
+            if self.text[self.pos : self.pos + 3] == "not":
+                for _ in range(3):  # Advance 'n', 'o', 't'
                     self.advance()
                 return Tolkien(TOLKIEN_TYPES["NOT"], "not")
 
