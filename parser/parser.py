@@ -1,5 +1,5 @@
 from lexer.lexer import Lexer
-from abstract_syntax_tree.nodes import Number, BinaryOp
+from abstract_syntax_tree.nodes import Number, BinaryOp, Boolean, CompareOp
 
 class Parser:
     def __init__(self, lexer: Lexer):
@@ -30,7 +30,7 @@ class Parser:
         """
         expressions = []
         while self.current_tolkien.type != 'EOF':
-            node = self.expr()
+            node = self.comparison()
             self.eat('SEMI')
             expressions.append(node)
         return expressions
@@ -79,3 +79,31 @@ class Parser:
             return node
         else:
             self.error('NUMBER or LPAREN')
+            
+    def comparison(self):
+        # comparison → expr ( (== | != | < | <= | > | >=) expr )*
+        node = self.expr()
+        while self.current_tolkien.type in ('EQ', 'NEQ', 'LT', 'LTE', 'GT', 'GTE'):
+            tolkien = self.current_tolkien
+            self.eat(tolkien.type)
+            node = CompareOp(left=node, op=tolkien.value, right=self.expr())
+        return node
+    
+    def factor(self):
+        # factor -> NUMBER | BOOLEAN | LPAREN comparison RPAREN
+        tolkien = self.current_tolkien
+        if tolkien.type == 'BOOLEAN':
+            self.eat('BOOLEAN')
+            return Boolean(tolkien.value)
+        elif tolkien.type == 'NUMBER':
+            self.eat('NUMBER')
+            return Number(tolkien.value)
+        elif tolkien.type == 'LPAREN':
+            self.eat('LPAREN')
+            node = self.comparison()
+            self.eat('RPAREN')
+            return node
+        else:
+            self.error('NUMBER, BOOLEAN, or LPAREN')
+            
+    

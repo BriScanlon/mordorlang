@@ -1,4 +1,4 @@
-from abstract_syntax_tree.nodes import Number, BinaryOp
+from abstract_syntax_tree.nodes import Number, BinaryOp, Boolean, CompareOp
 
 class Interpreter:
     def visit(self, node):
@@ -15,7 +15,7 @@ class Interpreter:
         # Return the numeric value from a Number node.
         return node.value
 
-    def visit_BinaryOp(self, node: BinaryOp):
+    def visit_BinaryOp(self, node: Boolean):
         #Evaluate BinaryOp nodes based on their operation (+, -, *, /).
         left_value = self.visit(node.left)
         right_value = self.visit(node.right)
@@ -30,5 +30,27 @@ class Interpreter:
             if right_value == 0:
                 raise ZeroDivisionError("Cannot divide by zero.")
             return left_value / right_value
+        else:
+            raise Exception(f"Unknown operator: {node.op}")
+
+    def visit_Boolean(self, node):
+        return node.value
+    
+    def visit_CompareOp(self, node: CompareOp):
+        left = self.visit(node.left)
+        right = self.visit(node.right)
+        
+        if node.op == '==':
+            return left == right
+        elif node.op == '!=':
+            return left != right
+        elif node.op == '<':
+            return left < right
+        elif node.op == '>':
+            return left > right
+        elif node.op == '<=':
+            return left <= right
+        elif node.op == '>=':
+            return left >= right
         else:
             raise Exception(f"Unknown operator: {node.op}")
