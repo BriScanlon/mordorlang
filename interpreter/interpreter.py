@@ -54,3 +54,22 @@ class Interpreter:
             return left >= right
         else:
             raise Exception(f"Unknown operator: {node.op}")
+        
+    def visit_LogicalOp(self, node):
+        left_value = self.visit(node.left)
+        right_value = self.visit(node.right)
+
+        if node.op == 'agh':
+            return left_value and right_value
+        elif node.op == 'or':
+            return left_value or right_value
+        else:
+            raise Exception(f"Unknown logical operator: {node.op}")
+
+    def visit_uniaryOp(self, node):
+        operand_value = self.visit(node.operand)
+        
+        if node.op == 'NOT':
+            return not operand_value
+        else:
+            raise Exception(f"Unknown unary operator: {node.op}")

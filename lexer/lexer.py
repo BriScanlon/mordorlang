@@ -96,9 +96,9 @@ class Lexer:
                 for _ in range(5): self.advance()
                 return Tolkien(TOLKIEN_TYPES["BOOLEAN"], False)
             
-            if self.text[self.pos].startswith("and"):
+            if self.text[self.pos].startswith("agh"):
                 for _ in range(3): self.advance()
-                return Tolkien(TOLKIEN_TYPES["AND"], "and")
+                return Tolkien(TOLKIEN_TYPES["AND"], "agh")
             
             if self.text[self.pos].startswith("or"):
                 for _ in range(2): self.advance()
@@ -108,7 +108,7 @@ class Lexer:
                 for _ in range(3): self.advance()
                 return Tolkien(TOLKIEN_TYPES["NOT"], "not")
             
-            if self.tet[self.pos].startswith("!"):
+            if self.text[self.pos].startswith("!"):
                 self.advance()
                 return Tolkien(TOLKIEN_TYPES["NOT"], "not")
 
