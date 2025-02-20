@@ -1,4 +1,4 @@
-from async_s_t.nodes import Number, BinaryOp
+from abstract_syntax_tree.nodes import Number, BinaryOp
 
 class Interpreter:
     def visit(self, node):

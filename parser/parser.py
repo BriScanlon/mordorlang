@@ -1,5 +1,5 @@
 from lexer.lexer import Lexer
-from async_s_t.nodes import Number, BinaryOp
+from abstract_syntax_tree.nodes import Number, BinaryOp
 
 class Parser:
     def __init__(self, lexer: Lexer):
