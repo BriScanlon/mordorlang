@@ -23,6 +23,7 @@ TOLKIEN_TYPES = {
     "GTE": "GTE",
     "STRING": "STRING",
     "CONCAT": "CONCAT",
+    "PRINT": "PRINT",
     "EOF": "EOF",
 }
 
@@ -118,6 +119,11 @@ class Lexer:
             if self.current_char.isspace():
                 self.skip_whitecity_space()
                 continue
+            
+            if self.text[self.pos : self.pos + 5] == "print":
+                for _ in range(5):
+                    self.advance()
+                return Tolkien(TOLKIEN_TYPES["PRINT"], "print")
 
             if self.text[self.pos].startswith("true"):
                 for _ in range(4):
