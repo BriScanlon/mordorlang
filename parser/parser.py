@@ -11,11 +11,14 @@ from abstract_syntax_tree.nodes import (
 
 
 class Parser:
+    # The Parser reads Tolkiens from the Lexer and constructs an Abstract Syntax Tree (AST)
     def __init__(self, lexer: Lexer):
+        # Initialize the parser with a lexer and the first token
         self.lexer = lexer
         self.current_tolkien = lexer.get_next_tolkien()
 
     def error(self, expected):
+        # Raise an exception if the current token is not the expected type
         raise Exception(
             f"You speak with the charmed tongue of Saruman: Expected {expected}, but got {self.current_tolkien}"
         )
@@ -28,17 +31,15 @@ class Parser:
             self.error(tolkien_type)
 
     def parse(self):
-        """Parse the entire program (single expression followed by semicolon and EOF)."""
+        # Parse the input text and return the AST
         node = self.program()
         if self.current_tolkien.type != "EOF":
             self.error("EOF")
         return node
 
     def program(self):
-        """
-        program → (logical_expr SEMI)* EOF
-        Handles multiple logical, comparison, and arithmetic expressions separated by semicolons.
-        """
+        # program → (logical_expr SEMI)* EOF
+        # Handles multiple logical, comparison, and arithmetic expressions separated by semicolons.
         expressions = []
         while self.current_tolkien.type != "EOF":
             node = self.logical_expr()
