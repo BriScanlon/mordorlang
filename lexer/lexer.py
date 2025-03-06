@@ -29,6 +29,7 @@ TOLKIEN_TYPES = {
 
 
 class Tolkien:
+    # A Tolkien is a single token in our language
     def __init__(self, type_, value=None):
         self.type = type_
         self.value = value
@@ -38,6 +39,7 @@ class Tolkien:
 
 
 class Lexer:
+    # The Lexer reads the input text and breaks it down into Tolkiens
     def __init__(self, text):
         self.text = text
         self.pos = 0
