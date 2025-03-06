@@ -38,9 +38,11 @@ class Interpreter:
 
 
     def visit_Boolean(self, node):
+        # Return the boolean value from a Boolean node.
         return node.value
     
     def visit_CompareOp(self, node: CompareOp):
+        # Evaluate CompareOp nodes based on their operation (==, !=, <, >, <=, >=).
         left = self.visit(node.left)
         right = self.visit(node.right)
         
@@ -60,6 +62,7 @@ class Interpreter:
             raise Exception(f"Unknown operator: {node.op}")
         
     def visit_LogicalOp(self, node):
+        # Evaluate LogicalOp nodes based on their operation (and, or, not).
         left_value = self.visit(node.left)
         right_value = self.visit(node.right)
 
@@ -75,6 +78,7 @@ class Interpreter:
             raise Exception(f"Unknown logical operator: {node.op}")
 
     def visit_UnaryOp(self, node):
+        # Evaluate UnaryOp nodes based on their operation (not, -).
         operand_value = self.visit(node.operand)
         
         if node.op == 'not':
@@ -85,4 +89,5 @@ class Interpreter:
             raise Exception(f"Unknown unary operator: {node.op}")
         
     def visit_String(self, node):
+        # Return the string value from a String node.
         return node.value
