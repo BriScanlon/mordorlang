@@ -59,14 +59,23 @@ class Parser:
             return self.logical_expr()  # Default: process an expression
 
     def print_statement(self):
-        # print_statement → PRINT LPAREN logical_expr RPAREN
+        # Allow both `print x;` and `print(x);`
         self.eat("PRINT")
-        if self.current_tolkien.type != "LPAREN":
-            self.error("LPAREN")  # Ensure the user writes `print(x)`
-        self.eat("LPAREN")
-        expr = self.logical_expr()
-        self.eat("RPAREN")
+        
+        if self.current_tolkien.type == "LPAREN":  
+            # Case: print(x)
+            self.eat("LPAREN")
+            expr = self.logical_expr()
+            self.eat("RPAREN")
+        else:
+            # Case: print x;
+            if self.current_tolkien.type == "IDENTIFIER":
+                expr = self.variable_reference()
+            else:
+                expr = self.logical_expr()
+
         return Print(expr)
+
 
     def program(self):
         # program → (statement SEMI)* EOF
