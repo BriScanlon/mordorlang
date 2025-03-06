@@ -13,3 +13,6 @@
 true agh false or true;
 10 / 2 >= 5;
 ("Total: " + (5 * 2)) == "Total: 10";
+goth agh burzum;
+x = 10;
+print("Test");

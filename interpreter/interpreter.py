@@ -1,6 +1,10 @@
-from abstract_syntax_tree.nodes import Number, BinaryOp, Boolean, CompareOp
+from abstract_syntax_tree.nodes import Number, BinaryOp, Boolean, CompareOp, LogicalOp, UnaryOp, String, Assign, Var, Print
 
 class Interpreter:
+    def __init__(self):
+        # Initialize the global variables dictionary
+        self.global_vars = {}
+    
     def visit(self, node):
         # Dispatch to the correct visit method based on node type
         method_name = f'visit_{type(node).__name__}'
@@ -87,6 +91,24 @@ class Interpreter:
             return -operand_value  # Negation of the number
         else:
             raise Exception(f"Unknown unary operator: {node.op}")
+        
+    def visit_Assign(self, node):
+        # Assign the value of the right node to the left node.
+        value = self.visit(node.expr)
+        self.global_vars[node.var_name] = value
+        return value
+    
+    def visit_Var(self, node):
+        # Return the value of the variable from the global_vars dictionary.
+        if node.var_name not in self.global_vars:
+            raise Exception(f"Undefined variable: {node.var_name}")
+        return self.global_vars[node.var_name]
+    
+    def visit_Print(self, node):
+        # Print the value of the expression node.
+        value = self.visit(node.expr)
+        print(value)
+        return value
         
     def visit_String(self, node):
         # Return the string value from a String node.

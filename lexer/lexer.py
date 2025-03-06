@@ -24,12 +24,13 @@ TOLKIEN_TYPES = {
     "STRING": "STRING",
     "CONCAT": "CONCAT",
     "PRINT": "PRINT",
+    "IDENTIFIER": "IDENTIFIER",
+    "EQUALS": "EQUALS",
     "EOF": "EOF",
 }
 
 
 class Tolkien:
-    # A Tolkien is a single token in our language
     def __init__(self, type_, value=None):
         self.type = type_
         self.value = value
@@ -38,30 +39,40 @@ class Tolkien:
         return f"Tolkien({self.type}, {repr(self.value)})"
 
 
+# Define Black Speech keywords
+BLACK_SPEECH_KEYWORDS = {
+    "true": Tolkien(TOLKIEN_TYPES["BOOLEAN"], True),
+    "false": Tolkien(TOLKIEN_TYPES["BOOLEAN"], False),
+    "goth": Tolkien(TOLKIEN_TYPES["BOOLEAN"], True),  # Alternative for true
+    "burzum": Tolkien(TOLKIEN_TYPES["BOOLEAN"], False),  # Alternative for false
+    "agh": Tolkien(TOLKIEN_TYPES["AND"], "agh"),  # Alternative for "and"
+    "and": Tolkien(TOLKIEN_TYPES["AND"], "and"),
+    "urz": Tolkien(TOLKIEN_TYPES["OR"], "urz"),  # Alternative for "or"
+    "or": Tolkien(TOLKIEN_TYPES["OR"], "or"),
+    "not": Tolkien(TOLKIEN_TYPES["NOT"], "not"),
+    "print": Tolkien(TOLKIEN_TYPES["PRINT"], "print"),
+}
+
+
 class Lexer:
-    # The Lexer reads the input text and breaks it down into Tolkiens
     def __init__(self, text):
         self.text = text
         self.pos = 0
         self.current_char = self.text[self.pos] if self.text else None
 
     def advance(self):
-        # Advance to the next character in the input
         self.pos += 1
         self.current_char = self.text[self.pos] if self.pos < len(self.text) else None
 
     def peek(self):
-        # Look at the next character without moving the pointer
         peek_pos = self.pos + 1
         return self.text[peek_pos] if peek_pos < len(self.text) else None
 
     def skip_whitecity_space(self):
-        # Skip white space
         while self.current_char is not None and self.current_char.isspace():
             self.advance()
 
     def number(self):
-        # this handles our multi digit numbers and floats if needed
         result = ""
         while self.current_char is not None and (
             self.current_char.isdigit() or self.current_char == "."
@@ -72,108 +83,49 @@ class Lexer:
             return Tolkien(TOLKIEN_TYPES["NUMBER"], float(result))
         return Tolkien(TOLKIEN_TYPES["NUMBER"], int(result))
 
-    def identifier(self):
-        # Handle identifiers (true, false)
-        result = ""
-        while self.current_char is not None and self.current_char.isalpha():
-            result += self.current_char
-            self.advance()
-        if result == "true":
-            return Tolkien(TOLKIEN_TYPES["BOOLEAN"], True)
-        elif result == "goth":
-            return Tolkien(TOLKIEN_TYPES["BOOLEAN"], True)
-        elif result == "false":
-            return Tolkien(TOLKIEN_TYPES["BOOLEAN"], False)
-        elif result == "burzum":
-            return Tolkien(TOLKIEN_TYPES["BOOLEAN"], False)
-        else:
-            raise Exception(f"The Eye does not recognize this: {result}")
-    
     def string(self):
-        result = ''
+        result = ""
         self.advance()
         while self.current_char is not None and self.current_char != '"':
             if self.current_char == "\\":
                 self.advance()
                 if self.current_char == "n":
                     result += "\n"
-                elif self.current_char == '"':
-                    result += '"'
                 elif self.current_char == "t":
                     result += "\t"
                 elif self.current_char == '"':
                     result += '"'
                 else:
-                    result = self.current_char
+                    result += self.current_char
             else:
                 result += self.current_char
             self.advance()
+
         if self.current_char != '"':
             raise Exception("The way is open, close the string literal!")
         self.advance()
         return Tolkien(TOLKIEN_TYPES["STRING"], result)
-        
+
+    def identifier(self):
+        """Handles identifiers (variables and keywords, including Black Speech)."""
+        result = ""
+        while self.current_char is not None and (
+            self.current_char.isalnum() or self.current_char == "_"
+        ):
+            result += self.current_char
+            self.advance()
+
+        # Check for Black Speech or standard keywords
+        return BLACK_SPEECH_KEYWORDS.get(
+            result, Tolkien(TOLKIEN_TYPES["IDENTIFIER"], result)
+        )
 
     def get_next_tolkien(self):
-        # Analyse and break our input down into Tolkiens
         while self.current_char is not None:
 
             if self.current_char.isspace():
                 self.skip_whitecity_space()
                 continue
-            
-            if self.text[self.pos : self.pos + 5] == "print":
-                for _ in range(5):
-                    self.advance()
-                return Tolkien(TOLKIEN_TYPES["PRINT"], "print")
-
-            if self.text[self.pos].startswith("true"):
-                for _ in range(4):
-                    self.advance()
-                return Tolkien(TOLKIEN_TYPES["BOOLEAN"], True)
-            
-            if self.text[self.pos].startswith("goth"):
-                for _ in range(4):
-                    self.advance()
-                return Tolkien(TOLKIEN_TYPES["BOOLEAN"], True)
-
-            if self.text[self.pos].startswith("false"):
-                for _ in range(5):
-                    self.advance()
-                return Tolkien(TOLKIEN_TYPES["BOOLEAN"], False)
-            
-            if self.text[self.pos].startswith("burzum"):
-                for _ in range(6):
-                    self.advance()
-                return Tolkien(TOLKIEN_TYPES["BOOLEAN"], False)
-
-            if self.text[self.pos : self.pos + 3] == "agh":
-                for _ in range(3):
-                    self.advance()
-                return Tolkien(TOLKIEN_TYPES["AND"], "agh")
-            
-            if self.text[self.pos : self.pos + 3] == "and":
-                for _ in range(3): 
-                    self.advance()
-                return Tolkien(TOLKIEN_TYPES["AND"], "and")
-
-            if self.text[self.pos : self.pos + 2] == "or":
-                for _ in range(2): 
-                    self.advance()
-                return Tolkien(TOLKIEN_TYPES["OR"], "or")
-            
-            if self.text[self.pos : self.pos + 3] == "urz":
-                for _ in range(3): 
-                    self.advance()
-                return Tolkien(TOLKIEN_TYPES["OR"], "urz")
-
-            if self.text[self.pos : self.pos + 3] == "not":
-                for _ in range(3):
-                    self.advance()
-                return Tolkien(TOLKIEN_TYPES["NOT"], "not")
-            
-            if self.current_char == '"':
-                return self.string()
 
             if self.current_char.isdigit():
                 return self.number()
@@ -181,12 +133,15 @@ class Lexer:
             if self.current_char.isalpha():
                 return self.identifier()
 
+            if self.current_char == '"':
+                return self.string()
+
             if self.current_char == "=":
                 self.advance()
                 if self.current_char == "=":
                     self.advance()
-                    return Tolkien(TOLKIEN_TYPES["EQ"], "==")
-                raise Exception("Single '=' is not allowed yet, use '==' instead")
+                    return Tolkien(TOLKIEN_TYPES["EQ"], "==")  # Equality check
+                return Tolkien(TOLKIEN_TYPES["EQUALS"], "=")  # Assignment operator
 
             if self.current_char == "!":
                 self.advance()

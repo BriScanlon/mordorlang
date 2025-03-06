@@ -6,7 +6,10 @@ from abstract_syntax_tree.nodes import (
     CompareOp,
     LogicalOp,
     UnaryOp,
-    String
+    String,
+    Assign,
+    Var,
+    Print,
 )
 
 
@@ -37,17 +40,43 @@ class Parser:
             self.error("EOF")
         return node
 
+    def assignment(self):
+        # assignment → IDENTIFIER EQUALS logical_expr
+        var_name = self.current_tolkien.value
+        self.eat("IDENTIFIER")  # Consume variable name
+        self.eat("EQUALS")  # Consume '='
+        value = self.logical_expr()  # Parse assigned value
+        return Assign(var_name, value)
+
+
+    def statement(self):
+        # statement → assignment | print_statement | logical_expr
+        if self.current_tolkien.type == "IDENTIFIER" and self.lexer.peek() == "=":
+            return self.assignment()  # Recognizes assignment statements
+        elif self.current_tolkien.type == "PRINT":
+            return self.print_statement()  # Recognizes print statements
+        else:
+            return self.logical_expr()  # Default: process an expression
+
+    def print_statement(self):
+        # print_statement → PRINT LPAREN logical_expr RPAREN
+        self.eat("PRINT")
+        if self.current_tolkien.type != "LPAREN":
+            self.error("LPAREN")  # Ensure the user writes `print(x)`
+        self.eat("LPAREN")
+        expr = self.logical_expr()
+        self.eat("RPAREN")
+        return Print(expr)
+
     def program(self):
-        # program → (logical_expr SEMI)* EOF
-        # Handles multiple logical, comparison, and arithmetic expressions separated by semicolons.
+        # program → (statement SEMI)* EOF
         expressions = []
         while self.current_tolkien.type != "EOF":
-            node = self.logical_expr()
-            self.eat("SEMI")
+            node = self.statement() # Supports assignments & print
+            self.eat("SEMI")  # Ensure semicolon after each statement
             expressions.append(node)
         return expressions
 
-    
     def expr(self):
         # expr → term ((PLUS | MINUS) term)*, handling strings and numbers
         node = self.term()
@@ -58,7 +87,6 @@ class Parser:
             node = BinaryOp(left=node, op=tolkien.value, right=right_node)
 
         return node
-
 
     def term(self):
         # term → unary_expr ((MULT | DIV) unary_expr)*
@@ -82,7 +110,7 @@ class Parser:
         # factor -> NOT factor | NUMBER | BOOLEAN | LPAREN comparison RPAREN
         # Handles Booleans, numbers and parentheses.
         tolkien = self.current_tolkien
-        
+
         if tolkien.type == "MINUS":
             self.eat("MINUS")
             return UnaryOp(op="-", operand=self.factor())
@@ -100,8 +128,16 @@ class Parser:
         elif tolkien.type == "STRING":
             self.eat("STRING")
             return String(tolkien.value)
+        elif tolkien.type == "IDENTIFIER":
+            return Var(self.variable_reference())
         else:
             self.error("NUMBER, BOOLEAN, MINUS or LPAREN")
+
+    def variable_reference(self):
+        # variable_reference → IDENTIFIER
+        var_name = self.current_tolkien.value   
+        self.eat("IDENTIFIER")
+        return Var(var_name)
 
     def logical_expr(self):
         # logical_expr → comparison ( (AND | OR) comparison )*
