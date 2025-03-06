@@ -1,4 +1,5 @@
 class Number:
+    # Number nodes represent numeric values in the AST.
     def __init__(self, value):
         self.value = value
 
@@ -7,6 +8,7 @@ class Number:
 
 
 class BinaryOp:
+    # BinaryOp nodes represent binary operations in the AST.
     def __init__(self, left, op, right):
         self.left = left
         self.op = op
@@ -17,6 +19,7 @@ class BinaryOp:
 
 
 class Boolean:
+    # Boolean nodes represent boolean values in the AST.
     def __init__(self, value):
         self.value = value
 
@@ -25,6 +28,7 @@ class Boolean:
 
 
 class CompareOp:
+    # CompareOp nodes represent comparison operations in the AST.
     def __init__(self, left, op, right):
         self.left = left
         self.op = op
@@ -35,6 +39,7 @@ class CompareOp:
 
 
 class LogicalOp:
+    # LogicalOp nodes represent logical operations in the AST.
     def __init__(self, left, op, right):
         self.left = left
         self.op = op
@@ -45,6 +50,7 @@ class LogicalOp:
 
 
 class UnaryOp:
+    # UnaryOp nodes represent unary operations in the AST.
     def __init__(self, op, operand):
         self.op = op
         self.operand = operand
@@ -53,6 +59,7 @@ class UnaryOp:
         return f"UnaryOp({self.op}, {self.operand})"
 
 class String:
+    # String nodes represent string values in the AST.
     def __init__(self, value):
         self.value = value
 
