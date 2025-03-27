@@ -9,13 +9,41 @@ from abstract_syntax_tree.nodes import (
     Assign,
     Var,
     Print,
+    Block,
+    If,
+    While,
 )
+
+
+class Environment:
+    def __init__(self, parent=None):
+        self.values = {}
+        self.parent = parent
+
+    def define(self, name, value):
+        self.values[name] = value
+
+    def assign(self, name, value):
+        if name in self.values:
+            # If the variable already exists in this scope, update it
+            self.values[name] = value
+        else:
+            # Always define new variables locally in this scope
+            self.values[name] = value
+
+    def get(self, name):
+        if name in self.values:
+            return self.values[name]
+        elif self.parent is not None:
+            return self.parent.get(name)
+        else:
+            raise Exception(f"Undefined variable: {name}")
 
 
 class Interpreter:
     def __init__(self):
         # Initialize the global variables dictionary
-        self.global_vars = {}
+        self.env = Environment()
 
     def visit(self, node):
         # Dispatch to the correct visit method based on node type
@@ -103,17 +131,14 @@ class Interpreter:
         else:
             raise Exception(f"Unknown unary operator: {node.op}")
 
-    def visit_Assign(self, node):
-        # Assign the value of the right node to the left node.
+    def visit_Assign(self, node: Assign):
         value = self.visit(node.expr)
-        self.global_vars[node.var_name] = value
+        # Assign the variable in the current environment
+        self.env.assign(node.var_name, value)
         return value
 
-    def visit_Var(self, node):
-        # Return the value of the variable from the global_vars dictionary.
-        if node.var_name not in self.global_vars:
-            raise Exception(f"Undefined variable: {node.var_name}")
-        return self.global_vars[node.var_name]
+    def visit_Var(self, node: Var):
+        return self.env.get(node.var_name)
 
     def visit_Print(self, node):
         # Print the value of the expression node.
@@ -142,3 +167,13 @@ class Interpreter:
         while self.visit(node.condition):
             self.visit(node.body)
         return None
+
+    def visit_Block(self, node: Block):
+        # Create a new environment for this block, with the current one as its parent.
+        previous_env = self.env
+        self.env = Environment(previous_env)
+        result = None
+        for statement in node.statements:
+            result = self.visit(statement)
+        self.env = previous_env
+        return result

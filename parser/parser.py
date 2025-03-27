@@ -175,32 +175,69 @@ class Parser:
         return self.factor()
 
     def while_statement(self):
-        # Parse a while loop: WHILE logical_expr statement
+        # while_statement → WHILE ( logical_expr )? block
         self.eat("WHILE")
-        condition = self.logical_expr()
-        body = self.statement()
+        if self.current_tolkien.type == "LPAREN":
+            self.eat("LPAREN")
+            condition = self.logical_expr()
+            self.eat("RPAREN")
+        else:
+            condition = self.logical_expr()
+        body = self.block()
+        from abstract_syntax_tree.nodes import While
+
         return While(condition, body)
 
+    def block(self):
+        # block → LBRACE (statement (SEMI)?)* RBRACE
+        self.eat("LBRACE")
+        statements = []
+        while self.current_tolkien.type != "RBRACE":
+            stmt = self.statement()
+            statements.append(stmt)
+            # If there's a semicolon, consume it; if the next token is RBRACE, that's acceptable.
+            if self.current_tolkien.type == "SEMI":
+                self.eat("SEMI")
+            elif self.current_tolkien.type != "RBRACE":
+                self.error("SEMI or RBRACE")
+        self.eat("RBRACE")
+        from abstract_syntax_tree.nodes import Block
+
+        return Block(statements)
+
     def if_statement(self):
-        # Parse an if-statement: IF condition statement (if_statement_tail)?
+        # if_statement → IF ( logical_expr )? block if_statement_tail?
         self.eat("IF")
-        condition = self.logical_expr()
-        then_branch = self.statement()
-        else_branch = self.if_statement_tail()  # Process any ELIF or ELSE parts
+        # Optional parentheses around condition:
+        if self.current_tolkien.type == "LPAREN":
+            self.eat("LPAREN")
+            condition = self.logical_expr()
+            self.eat("RPAREN")
+        else:
+            condition = self.logical_expr()
+        then_branch = self.block()
+        else_branch = self.if_statement_tail()
+        from abstract_syntax_tree.nodes import If  # Ensure If is imported
+
         return If(condition, then_branch, else_branch)
 
     def if_statement_tail(self):
-        # Parse the tail of an if-statement, which can be an ELIF chain or an ELSE branch.
+        # if_statement_tail → (ELIF ( ( logical_expr )? block ) | ELSE block )?
         if self.current_tolkien.type == "ELIF":
             self.eat("ELIF")
-            condition = self.logical_expr()
-            then_branch = self.statement()
-            else_branch = self.if_statement_tail()  # Allow for further ELIF or ELSE
-            # Represent the ELIF as a nested If node in the else_branch.
+            if self.current_tolkien.type == "LPAREN":
+                self.eat("LPAREN")
+                condition = self.logical_expr()
+                self.eat("RPAREN")
+            else:
+                condition = self.logical_expr()
+            then_branch = self.block()
+            else_branch = self.if_statement_tail()  # Allow further chaining.
+            from abstract_syntax_tree.nodes import If
+
             return If(condition, then_branch, else_branch)
         elif self.current_tolkien.type == "ELSE":
             self.eat("ELSE")
-            return self.statement()
+            return self.block()
         else:
-            # No further branch; return None to indicate the end of the chain.
             return None

@@ -131,3 +131,12 @@ class Print:
 
     def __repr__(self):
         return f"Print({self.expr})"
+
+
+class Block:
+    # Block nodes represent a sequence of statements in a block.
+    def __init__(self, statements):
+        self.statements = statements
+
+    def __repr__(self):
+        return f"Block({self.statements})"

@@ -30,7 +30,9 @@ TOLKIEN_TYPES = {
     "IF": "IF",
     "ELSE": "ELSE",
     "ELIF": "ELIF",
-    "WHILE": "WHILE"
+    "WHILE": "WHILE",
+    "LBRACE": "LBRACE",
+    "RBRACE": "RBRACE",
 }
 
 
@@ -205,6 +207,13 @@ class Lexer:
             if self.current_char == ";":
                 self.advance()
                 return Tolkien(TOLKIEN_TYPES["SEMI"], ";")
+            
+            if self.current_char == "{":
+                self.advance()
+                return Tolkien(TOLKIEN_TYPES["LBRACE"], "{")
+            if self.current_char == "}":
+                self.advance()
+                return Tolkien(TOLKIEN_TYPES["RBRACE"], "}")
 
             raise Exception(
                 f"The Nine are abroad, this is not part of the Fellowship: {self.current_char}"
