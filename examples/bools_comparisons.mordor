@@ -1,6 +1,6 @@
-true == false;
-false != true;
-5 > 3;
-(5 + 2) <= (10 - 3);
-(10 / 2) == 51;
-true agh true;
+krimp(true == false);
+krimp(false != true);
+krimp(5 > 3);
+krimp((5 + 2) <= (10 - 3));
+krimp((10 / 2) == 51);
+krimp(goth agh burzum);

@@ -2,9 +2,12 @@
 x = 0;
 print x;
 
-if x == 0 print "x is zero" else print "x is not zero";
+if (x == 0) {print "x is zero"} else {print "x is not zero"};
 
-if x > 0 print "x is positive" elif x == 0 print "x is zero" else print "x is negative";
+if (x > 0) {print "x is positive"} else {print "x is negative"};
 
-while x < 5 x = x + 1;
+while (x < 5) {
+x = x + 1;
 print x;
+};
+

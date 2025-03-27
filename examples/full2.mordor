@@ -2,12 +2,12 @@ x = 11;
 
 if ( x > 0 ) {
     if ( x < 10 ) {
-        print "x latûk 1 im 9";
+        krimp "x latûk 1 im 9";
     } elif ( x == 10 ) {
-        print "x kât im ulûk";
+        krimp "x kât im ulûk";
     } else {
-        print "x zuul-ishi";
+        krimp "x zuul-ishi";
     }
 } else {
-    print "x burzum";
+    krimp "x burzum";
 };
