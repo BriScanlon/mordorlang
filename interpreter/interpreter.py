@@ -129,13 +129,12 @@ class Interpreter:
         # Evaluate the condition of the If node.
         condition_value = self.visit(node.condition)
         if condition_value:
-            # If the condition is true, execute the 'then' branch.
-            return self.visit(node.body)
-        elif node.oth is not None:
-            # If the condition is false and an 'else' or 'elif' branch exists,
+            # If the condition is true, execute the then_branch.
+            return self.visit(node.then_branch)
+        elif node.else_branch is not None:
+            # If the condition is false and an else_branch exists,
             # recursively evaluate it.
-            return self.visit(node.oth)
-        # If there's no branch to execute, return None.
+            return self.visit(node.else_branch)
         return None
 
     def visit_While(self, node):

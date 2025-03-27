@@ -55,6 +55,7 @@ BLACK_SPEECH_KEYWORDS = {
     "or": Tolkien(TOLKIEN_TYPES["OR"], "or"),
     "not": Tolkien(TOLKIEN_TYPES["NOT"], "not"),
     "print": Tolkien(TOLKIEN_TYPES["PRINT"], "print"),
+    "krimp": Tolkien(TOLKIEN_TYPES["PRINT"], "krimp"),  # Alternative for "print"
     "if": Tolkien(TOLKIEN_TYPES["IF"], "if"),
     "gul": Tolkien(TOLKIEN_TYPES["IF"], "gul"),  # Alternative for "if"
     "else": Tolkien(TOLKIEN_TYPES["ELSE"], "else"),

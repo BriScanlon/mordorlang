@@ -18,7 +18,7 @@ def main(file_path):
     # Visit the AST
     for i, expr in enumerate(ast, 1):
         result = interpreter.visit(expr)
-        print(f"Result for expression {i}: {result}")
+        print(f"Durbat ulûk {i}: {result}")
 
 if __name__ == "__main__":
     import sys

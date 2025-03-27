@@ -10,7 +10,8 @@ from abstract_syntax_tree.nodes import (
     Assign,
     Var,
     Print,
-    If
+    If,
+    While,
 )
 
 
@@ -49,25 +50,27 @@ class Parser:
         value = self.logical_expr()  # Parse assigned value
         return Assign(var_name, value)
 
-
     def statement(self):
         if self.current_tolkien.type == "IF":
             return self.if_statement()
-        # statement → assignment | print_statement | logical_expr
         elif self.current_tolkien.type == "WHILE":
             return self.while_statement()
         elif self.current_tolkien.type == "IDENTIFIER" and self.lexer.peek() == "=":
             return self.assignment()  # Recognizes assignment statements
         elif self.current_tolkien.type == "PRINT":
             return self.print_statement()  # Recognizes print statements
+        elif self.current_tolkien.type == "ELSE":
+            # An ELSE token should only be encountered within an if_statement_tail.
+            # If found here, simply return None.
+            return None
         else:
             return self.logical_expr()  # Default: process an expression
 
     def print_statement(self):
         # Allow both `print x;` and `print(x);`
         self.eat("PRINT")
-        
-        if self.current_tolkien.type == "LPAREN":  
+
+        if self.current_tolkien.type == "LPAREN":
             # Case: print(x)
             self.eat("LPAREN")
             expr = self.logical_expr()
@@ -81,12 +84,11 @@ class Parser:
 
         return Print(expr)
 
-
     def program(self):
         # program → (statement SEMI)* EOF
         expressions = []
         while self.current_tolkien.type != "EOF":
-            node = self.statement() # Supports assignments & print
+            node = self.statement()  # Supports assignments & print
             self.eat("SEMI")  # Ensure semicolon after each statement
             expressions.append(node)
         return expressions
@@ -143,13 +145,13 @@ class Parser:
             self.eat("STRING")
             return String(tolkien.value)
         elif tolkien.type == "IDENTIFIER":
-            return Var(self.variable_reference())
+            return self.variable_reference()
         else:
             self.error("NUMBER, BOOLEAN, MINUS or LPAREN")
 
     def variable_reference(self):
         # variable_reference → IDENTIFIER
-        var_name = self.current_tolkien.value   
+        var_name = self.current_tolkien.value
         self.eat("IDENTIFIER")
         return Var(var_name)
 
@@ -171,9 +173,9 @@ class Parser:
             self.eat("NOT")
             return UnaryOp(op=tolkien.value, operand=self.unary_expr())
         return self.factor()
-    
+
     def while_statement(self):
-        # while_statement → WHILE logical_expr statement
+        # Parse a while loop: WHILE logical_expr statement
         self.eat("WHILE")
         condition = self.logical_expr()
         body = self.statement()
@@ -194,7 +196,7 @@ class Parser:
             condition = self.logical_expr()
             then_branch = self.statement()
             else_branch = self.if_statement_tail()  # Allow for further ELIF or ELSE
-            # Represent the ELIF as a nested If node in the else branch.
+            # Represent the ELIF as a nested If node in the else_branch.
             return If(condition, then_branch, else_branch)
         elif self.current_tolkien.type == "ELSE":
             self.eat("ELSE")
