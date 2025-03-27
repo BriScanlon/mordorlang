@@ -140,3 +140,51 @@ class Block:
 
     def __repr__(self):
         return f"Block({self.statements})"
+
+
+class Fun:
+    """
+    Represents a function definition.
+    Attributes:
+        name: The function name (identifier).
+        params: A list of parameter names.
+        body: A Block node (or similar) containing the function statements.
+    """
+
+    def __init__(self, name, params, body):
+        self.name = name
+        self.params = params
+        self.body = body
+
+    def __repr__(self):
+        return f"FunctionDef({self.name}, {self.params}, {self.body})"
+
+
+class FunctionCall:
+    """
+    Represents a function call.
+    Attributes:
+        func_name: The name of the function being called.
+        arguments: A list of expressions to evaluate as arguments.
+    """
+
+    def __init__(self, func_name, arguments):
+        self.func_name = func_name
+        self.arguments = arguments
+
+    def __repr__(self):
+        return f"FunctionCall({self.func_name}, {self.arguments})"
+
+
+class Return:
+    """
+    Represents a return statement.
+    Attributes:
+        expr: The expression whose value is returned (or None if no value).
+    """
+
+    def __init__(self, expr):
+        self.expr = expr
+
+    def __repr__(self):
+        return f"Return({self.expr})"

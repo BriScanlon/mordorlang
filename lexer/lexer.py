@@ -33,6 +33,9 @@ TOLKIEN_TYPES = {
     "WHILE": "WHILE",
     "LBRACE": "LBRACE",
     "RBRACE": "RBRACE",
+    "FUN": "FUN",
+    "RETURN": "RETURN",
+    "COMMA": "COMMA",
 }
 
 
@@ -65,7 +68,9 @@ BLACK_SPEECH_KEYWORDS = {
     "gul-nakh": Tolkien(TOLKIEN_TYPES["ELIF"], "gul-nakh"),  # Alternative for "elif"
     "elif": Tolkien(TOLKIEN_TYPES["ELIF"], "elif"),
     "while": Tolkien(TOLKIEN_TYPES["WHILE"], "while"),
-    "arburz": Tolkien(TOLKIEN_TYPES["WHILE"], "arburz")  # Alternative for "while"
+    "arburz": Tolkien(TOLKIEN_TYPES["WHILE"], "arburz"),  # Alternative for "while"
+    "fun": Tolkien(TOLKIEN_TYPES["FUN"], "fun"),
+    "zagh": Tolkien(TOLKIEN_TYPES["RETURN"], "zagh"),
 }
 
 
@@ -203,6 +208,10 @@ class Lexer:
             if self.current_char == ")":
                 self.advance()
                 return Tolkien(TOLKIEN_TYPES["RPAREN"], ")")
+            
+            if self.current_char == ",":
+                self.advance()
+                return Tolkien(TOLKIEN_TYPES["COMMA"], ",")
 
             if self.current_char == ";":
                 self.advance()
