@@ -27,6 +27,10 @@ TOLKIEN_TYPES = {
     "IDENTIFIER": "IDENTIFIER",
     "EQUALS": "EQUALS",
     "EOF": "EOF",
+    "IF": "IF",
+    "ELSE": "ELSE",
+    "ELIF": "ELIF",
+    "WHILE": "WHILE"
 }
 
 
@@ -51,6 +55,14 @@ BLACK_SPEECH_KEYWORDS = {
     "or": Tolkien(TOLKIEN_TYPES["OR"], "or"),
     "not": Tolkien(TOLKIEN_TYPES["NOT"], "not"),
     "print": Tolkien(TOLKIEN_TYPES["PRINT"], "print"),
+    "if": Tolkien(TOLKIEN_TYPES["IF"], "if"),
+    "gul": Tolkien(TOLKIEN_TYPES["IF"], "gul"),  # Alternative for "if"
+    "else": Tolkien(TOLKIEN_TYPES["ELSE"], "else"),
+    "skai": Tolkien(TOLKIEN_TYPES["ELSE"], "skai"),
+    "gul-nakh": Tolkien(TOLKIEN_TYPES["ELIF"], "gul-nakh"),  # Alternative for "elif"
+    "elif": Tolkien(TOLKIEN_TYPES["ELIF"], "elif"),
+    "while": Tolkien(TOLKIEN_TYPES["WHILE"], "while"),
+    "arburz": Tolkien(TOLKIEN_TYPES["WHILE"], "arburz")  # Alternative for "while"
 }
 
 

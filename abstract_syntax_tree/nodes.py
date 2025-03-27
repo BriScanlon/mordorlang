@@ -58,6 +58,7 @@ class UnaryOp:
     def __repr__(self):
         return f"UnaryOp({self.op}, {self.operand})"
 
+
 class String:
     # String nodes represent string values in the AST.
     def __init__(self, value):
@@ -65,7 +66,8 @@ class String:
 
     def __repr__(self):
         return f'String("{self.value}")'
-    
+
+
 class Assign:
     # Assign nodes represent assignment operations in the AST.
     def __init__(self, var_name, expr):
@@ -74,7 +76,8 @@ class Assign:
 
     def __repr__(self):
         return f"Assign({self.var_name}, {self.expr})"
-    
+
+
 class Var:
     # Var nodes represent variable names in the AST.
     def __init__(self, var_name):
@@ -82,25 +85,44 @@ class Var:
 
     def __repr__(self):
         return f"Var({self.var_name})"
-    
+
+
 class If:
-    # If nodes represent conditional statements in the AST.
-    def __init__(self, condition, body, oth):
+    """
+    Represents an if-statement in the AST.
+
+    Attributes:
+        condition: The condition expression for the if statement.
+        then_branch: The statement or block executed when the condition is true.
+        else_branch: Either another If node (representing an elif) or the statement/block executed in the else case.
+                     If no else or elif exists, this is None.
+    """
+
+    def __init__(self, condition, then_branch, else_branch):
         self.condition = condition
-        self.body = body
-        self.oth = oth
+        self.then_branch = then_branch
+        self.else_branch = else_branch
 
     def __repr__(self):
-        return f"If({self.condition}, {self.body}, {self.oth})"
-    
+        return f"If({self.condition}, {self.then_branch}, {self.else_branch})"
+
+
 class While:
-    # While nodes represent loop statements in the AST.
+    """
+    Represents a while-loop in the AST.
+
+    Attributes:
+        condition: The loop condition expression.
+        body: The statement or block that is repeatedly executed while the condition is true.
+    """
+
     def __init__(self, condition, body):
         self.condition = condition
         self.body = body
 
     def __repr__(self):
         return f"While({self.condition}, {self.body})"
+
 
 class Print:
     # Print nodes represent print statements in the AST.
@@ -109,4 +131,3 @@ class Print:
 
     def __repr__(self):
         return f"Print({self.expr})"
-    

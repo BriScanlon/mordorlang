@@ -10,6 +10,7 @@ from abstract_syntax_tree.nodes import (
     Assign,
     Var,
     Print,
+    If
 )
 
 
@@ -50,8 +51,12 @@ class Parser:
 
 
     def statement(self):
+        if self.current_tolkien.type == "IF":
+            return self.if_statement()
         # statement → assignment | print_statement | logical_expr
-        if self.current_tolkien.type == "IDENTIFIER" and self.lexer.peek() == "=":
+        elif self.current_tolkien.type == "WHILE":
+            return self.while_statement()
+        elif self.current_tolkien.type == "IDENTIFIER" and self.lexer.peek() == "=":
             return self.assignment()  # Recognizes assignment statements
         elif self.current_tolkien.type == "PRINT":
             return self.print_statement()  # Recognizes print statements
@@ -166,3 +171,34 @@ class Parser:
             self.eat("NOT")
             return UnaryOp(op=tolkien.value, operand=self.unary_expr())
         return self.factor()
+    
+    def while_statement(self):
+        # while_statement → WHILE logical_expr statement
+        self.eat("WHILE")
+        condition = self.logical_expr()
+        body = self.statement()
+        return While(condition, body)
+
+    def if_statement(self):
+        # Parse an if-statement: IF condition statement (if_statement_tail)?
+        self.eat("IF")
+        condition = self.logical_expr()
+        then_branch = self.statement()
+        else_branch = self.if_statement_tail()  # Process any ELIF or ELSE parts
+        return If(condition, then_branch, else_branch)
+
+    def if_statement_tail(self):
+        # Parse the tail of an if-statement, which can be an ELIF chain or an ELSE branch.
+        if self.current_tolkien.type == "ELIF":
+            self.eat("ELIF")
+            condition = self.logical_expr()
+            then_branch = self.statement()
+            else_branch = self.if_statement_tail()  # Allow for further ELIF or ELSE
+            # Represent the ELIF as a nested If node in the else branch.
+            return If(condition, then_branch, else_branch)
+        elif self.current_tolkien.type == "ELSE":
+            self.eat("ELSE")
+            return self.statement()
+        else:
+            # No further branch; return None to indicate the end of the chain.
+            return None
