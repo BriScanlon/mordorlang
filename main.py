@@ -17,8 +17,7 @@ def main(file_path):
     interpreter = Interpreter()
     # Visit the AST
     for i, expr in enumerate(ast, 1):
-        result = interpreter.visit(expr)
-        print(f"Result for expression {i}: {result}")
+        interpreter.visit(expr)
 
 if __name__ == "__main__":
     import sys

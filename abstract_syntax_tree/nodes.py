@@ -58,6 +58,7 @@ class UnaryOp:
     def __repr__(self):
         return f"UnaryOp({self.op}, {self.operand})"
 
+
 class String:
     # String nodes represent string values in the AST.
     def __init__(self, value):
@@ -65,7 +66,8 @@ class String:
 
     def __repr__(self):
         return f'String("{self.value}")'
-    
+
+
 class Assign:
     # Assign nodes represent assignment operations in the AST.
     def __init__(self, var_name, expr):
@@ -74,7 +76,8 @@ class Assign:
 
     def __repr__(self):
         return f"Assign({self.var_name}, {self.expr})"
-    
+
+
 class Var:
     # Var nodes represent variable names in the AST.
     def __init__(self, var_name):
@@ -82,25 +85,44 @@ class Var:
 
     def __repr__(self):
         return f"Var({self.var_name})"
-    
+
+
 class If:
-    # If nodes represent conditional statements in the AST.
-    def __init__(self, condition, body, oth):
+    """
+    Represents an if-statement in the AST.
+
+    Attributes:
+        condition: The condition expression for the if statement.
+        then_branch: The statement or block executed when the condition is true.
+        else_branch: Either another If node (representing an elif) or the statement/block executed in the else case.
+                     If no else or elif exists, this is None.
+    """
+
+    def __init__(self, condition, then_branch, else_branch):
         self.condition = condition
-        self.body = body
-        self.oth = oth
+        self.then_branch = then_branch
+        self.else_branch = else_branch
 
     def __repr__(self):
-        return f"If({self.condition}, {self.body}, {self.oth})"
-    
+        return f"If({self.condition}, {self.then_branch}, {self.else_branch})"
+
+
 class While:
-    # While nodes represent loop statements in the AST.
+    """
+    Represents a while-loop in the AST.
+
+    Attributes:
+        condition: The loop condition expression.
+        body: The statement or block that is repeatedly executed while the condition is true.
+    """
+
     def __init__(self, condition, body):
         self.condition = condition
         self.body = body
 
     def __repr__(self):
         return f"While({self.condition}, {self.body})"
+
 
 class Print:
     # Print nodes represent print statements in the AST.
@@ -109,4 +131,60 @@ class Print:
 
     def __repr__(self):
         return f"Print({self.expr})"
-    
+
+
+class Block:
+    # Block nodes represent a sequence of statements in a block.
+    def __init__(self, statements):
+        self.statements = statements
+
+    def __repr__(self):
+        return f"Block({self.statements})"
+
+
+class Fun:
+    """
+    Represents a function definition.
+    Attributes:
+        name: The function name (identifier).
+        params: A list of parameter names.
+        body: A Block node (or similar) containing the function statements.
+    """
+
+    def __init__(self, name, params, body):
+        self.name = name
+        self.params = params
+        self.body = body
+
+    def __repr__(self):
+        return f"FunctionDef({self.name}, {self.params}, {self.body})"
+
+
+class FunctionCall:
+    """
+    Represents a function call.
+    Attributes:
+        func_name: The name of the function being called.
+        arguments: A list of expressions to evaluate as arguments.
+    """
+
+    def __init__(self, func_name, arguments):
+        self.func_name = func_name
+        self.arguments = arguments
+
+    def __repr__(self):
+        return f"FunctionCall({self.func_name}, {self.arguments})"
+
+
+class Return:
+    """
+    Represents a return statement.
+    Attributes:
+        expr: The expression whose value is returned (or None if no value).
+    """
+
+    def __init__(self, expr):
+        self.expr = expr
+
+    def __repr__(self):
+        return f"Return({self.expr})"

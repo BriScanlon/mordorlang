@@ -1,6 +1,0 @@
-true == false;
-false != true;
-5 > 3;
-(5 + 2) <= (10 - 3);
-(10 / 2) == 51;
-true agh true;

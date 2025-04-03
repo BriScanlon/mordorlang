@@ -1,0 +1,8 @@
+x = 5;
+krimp x;
+gul x > 0 gul x < 10 krimp "x latûk 1 im 9" gul-nakh x == 10 krimp "x kât im ulûk" skai krimp "x zuul-ishi";
+y = 0;
+arburz y < 5 y = y + 1;
+krimp y;
+gul x > 3 gul y == 5 krimp "Nested: x > 3 and y == 5" skai krimp "Nested: x > 3 but y != 5" skai krimp "Nested: x <= 3";
+krimp "Durbat ulûk: All tests complete";

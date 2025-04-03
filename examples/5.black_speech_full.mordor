@@ -1,0 +1,24 @@
+orcs = 0;
+humans = 1900;
+krimp("We begin with " + orcs + " orcs");
+
+arburz (orcs < 10000) {
+    orcs = orcs + 1;
+    gul (orcs == 10000) {
+        krimp("We have an Orc army worthy of the Eye! orcs = " + orcs);
+        gul (humans > 10000) {
+            krimp("Humans Beat Orcs");
+        } guulnakh (humans == 10000) {
+            krimp("It's a draw!");
+        } skai {
+            arburz (humans < 10001) {
+                humans = humans + 1;
+            }
+        };
+
+        gul (humans > orcs) {
+            krimp("Forth Egorlas!");
+            krimp("Humanity Wins");
+        };
+    };
+};

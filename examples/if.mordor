@@ -1,0 +1,14 @@
+x = 5;
+krimp x;
+
+gul (x > 0) {
+    gul (x < 10) {
+        krimp "x latûk 1 im 9";
+    } skai {
+        krimp "x kât im ulûk";
+    }
+} skai {
+    krimp "x zuul-ishi";
+};
+
+krimp x;

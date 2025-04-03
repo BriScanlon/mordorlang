@@ -1,0 +1,13 @@
+x = 11;
+
+if ( x > 0 ) {
+    if ( x < 10 ) {
+        krimp "x latûk 1 im 9";
+    } elif ( x == 10 ) {
+        krimp "x kât im ulûk";
+    } else {
+        krimp "x zuul-ishi";
+    }
+} else {
+    krimp "x burzum";
+};
