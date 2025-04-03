@@ -158,3 +158,4 @@ Happy coding in MordorLang!
 ---
 
 This document serves as a guide for both new users and developers looking to understand and work with MordorLang. Feel free to expand these instructions as you add new features or improvements.
+
