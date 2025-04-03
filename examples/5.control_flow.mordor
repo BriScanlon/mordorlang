@@ -1,7 +1,24 @@
 orcs = 0;
+humans = 1900;
 print("We begin with " + orcs + " orcs");
 
-while orcs < 10000
-print("Add an orc!");
-orcs = orcs + 1;
-print("total orcs = " + orcs);
+while (orcs < 10000) {
+    orcs = orcs + 1;
+    if (orcs == 10000) {
+        print("We have an Orc army worthy of the Eye! orcs = " + orcs);
+        if (humans > 10000) {
+            print("Humans Beat Orcs");
+        } elif (humans == 10000) {
+            print("It's a draw!");
+        } else {
+            while (humans < 10001) {
+                humans = humans + 1;
+            }
+        };
+
+        if (humans > orcs) {
+            print("Forth Egorlas!");
+            print("Humanity Wins");
+        };
+    }
+};

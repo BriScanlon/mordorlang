@@ -67,7 +67,7 @@ BLACK_SPEECH_KEYWORDS = {
     "gul-nakh": Tolkien(TOLKIEN_TYPES["ELIF"], "gul-nakh"),
     "elif": Tolkien(TOLKIEN_TYPES["ELIF"], "elif"),
     "while": Tolkien(TOLKIEN_TYPES["WHILE"], "while"),
-    "arburz": Tolkien(TOLKIEN_TYPES["WHILE"], "arburz"),  # Alternative for "while"
+    "arburz": Tolkien(TOLKIEN_TYPES["WHILE"], "arburz"),
     "fun": Tolkien(TOLKIEN_TYPES["FUN"], "fun"),
     "zagh": Tolkien(TOLKIEN_TYPES["RETURN"], "zagh"),
 }

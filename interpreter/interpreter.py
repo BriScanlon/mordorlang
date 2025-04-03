@@ -12,9 +12,9 @@ from abstract_syntax_tree.nodes import (
     Block,
     If,
     While,
-    Fun, 
+    Fun,
     FunctionCall,
-    Return 
+    Return,
 )
 
 
@@ -24,6 +24,7 @@ class ReturnException(Exception):
     When a return statement is encountered, we raise this,
     and the function call visitor catches it.
     """
+
     def __init__(self, value):
         self.value = value
 
@@ -38,9 +39,10 @@ class Environment:
         self.values[name] = value
 
     def assign(self, name, value):
-        # Restrict new variables to this scope; do not bubble up
         if name in self.values:
             self.values[name] = value
+        elif self.parent is not None:
+            self.parent.assign(name, value)
         else:
             self.values[name] = value
 
@@ -66,10 +68,8 @@ class Interpreter:
     def no_visit_method(self, node):
         raise Exception(f"No visit_{type(node).__name__} method defined.")
 
-    # -----------------------
-    #   Basic AST Visitors
-    # -----------------------
 
+    #   Basic AST Visitors
     def visit_Number(self, node: Number):
         return node.value
 
@@ -129,17 +129,14 @@ class Interpreter:
             return not operand_value
         elif node.op == "-":
             # Negation of the number
-            return -operand_value  
+            return -operand_value
         else:
             raise Exception(f"Unknown unary operator: {node.op}")
 
     def visit_String(self, node: String):
         return node.value
 
-    # -----------------------
-    #  Variables and Assign
-    # -----------------------
-
+    # Variables and Assign
     def visit_Assign(self, node: Assign):
         value = self.visit(node.expr)
         self.env.assign(node.var_name, value)
@@ -148,10 +145,7 @@ class Interpreter:
     def visit_Var(self, node: Var):
         return self.env.get(node.var_name)
 
-    # -----------------------
-    #      Print & Block
-    # -----------------------
-
+    # Print & Block
     def visit_Print(self, node: Print):
         value = self.visit(node.expr)
         print(value)
@@ -168,10 +162,7 @@ class Interpreter:
         self.env = previous_env
         return result
 
-    # -----------------------
-    #        If & While
-    # -----------------------
-
+    # If & While
     def visit_If(self, node: If):
         condition_value = self.visit(node.condition)
         if condition_value:
@@ -185,10 +176,7 @@ class Interpreter:
             self.visit(node.body)
         return None
 
-    # -----------------------
-    #   Function & Return
-    # -----------------------
-
+    # Function & Return
     def visit_Fun(self, node: Fun):
         """
         If your parser produces a 'Fun' node for function definitions.
@@ -199,7 +187,7 @@ class Interpreter:
 
     def visit_Fun(self, node: Fun):
         """
-        If your parser uses a 'FunctionDef' node. 
+        If your parser uses a 'FunctionDef' node.
         Similar logic: store node in environment.
         """
         self.env.define(node.name, node)
