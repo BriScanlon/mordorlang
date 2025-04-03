@@ -5,3 +5,4 @@ parser/__pycache__/
 .pyc
 abstract_syntax_tree/__pycache__/__init__.cpython-312.pyc
 abstract_syntax_tree/__pycache__/nodes.cpython-312.pyc
+abstract_syntax_tree/__pycache__/nodes.cpython-312.pyc
