@@ -1,7 +1,3 @@
-Below is an example of a BUILD.md file that explains how to pull down the repository, set up your environment from scratch, and run the interpreter. Save this as `BUILD.md` in your project.
-
----
-
 # MordorLang Build and Setup Instructions
 
 This document provides step-by-step instructions on how to clone the repository, set up your environment, and run the MordorLang interpreter. These instructions assume nothing about your end-user environment.
