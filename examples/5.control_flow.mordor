@@ -1,0 +1,7 @@
+orcs = 0;
+print("We begin with " + orcs + " orcs");
+
+while orcs < 10000
+print("Add an orc!");
+orcs = orcs + 1;
+print("total orcs = " + orcs);

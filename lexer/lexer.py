@@ -1,7 +1,6 @@
 import re
 
-# define our tokens/Tolkiens as constants
-
+# define our Tolkiens as constants
 TOLKIEN_TYPES = {
     "NUMBER": "NUMBER",
     "PLUS": "PLUS",
@@ -52,20 +51,20 @@ class Tolkien:
 BLACK_SPEECH_KEYWORDS = {
     "true": Tolkien(TOLKIEN_TYPES["BOOLEAN"], True),
     "false": Tolkien(TOLKIEN_TYPES["BOOLEAN"], False),
-    "goth": Tolkien(TOLKIEN_TYPES["BOOLEAN"], True),  # Alternative for true
-    "burzum": Tolkien(TOLKIEN_TYPES["BOOLEAN"], False),  # Alternative for false
-    "agh": Tolkien(TOLKIEN_TYPES["AND"], "agh"),  # Alternative for "and"
+    "goth": Tolkien(TOLKIEN_TYPES["BOOLEAN"], True),
+    "burzum": Tolkien(TOLKIEN_TYPES["BOOLEAN"], False),
+    "agh": Tolkien(TOLKIEN_TYPES["AND"], "agh"), 
     "and": Tolkien(TOLKIEN_TYPES["AND"], "and"),
-    "urz": Tolkien(TOLKIEN_TYPES["OR"], "urz"),  # Alternative for "or"
+    "urz": Tolkien(TOLKIEN_TYPES["OR"], "urz"), 
     "or": Tolkien(TOLKIEN_TYPES["OR"], "or"),
     "not": Tolkien(TOLKIEN_TYPES["NOT"], "not"),
     "print": Tolkien(TOLKIEN_TYPES["PRINT"], "print"),
-    "krimp": Tolkien(TOLKIEN_TYPES["PRINT"], "krimp"),  # Alternative for "print"
+    "krimp": Tolkien(TOLKIEN_TYPES["PRINT"], "krimp"), 
     "if": Tolkien(TOLKIEN_TYPES["IF"], "if"),
-    "gul": Tolkien(TOLKIEN_TYPES["IF"], "gul"),  # Alternative for "if"
+    "gul": Tolkien(TOLKIEN_TYPES["IF"], "gul"), 
     "else": Tolkien(TOLKIEN_TYPES["ELSE"], "else"),
     "skai": Tolkien(TOLKIEN_TYPES["ELSE"], "skai"),
-    "gul-nakh": Tolkien(TOLKIEN_TYPES["ELIF"], "gul-nakh"),  # Alternative for "elif"
+    "gul-nakh": Tolkien(TOLKIEN_TYPES["ELIF"], "gul-nakh"),
     "elif": Tolkien(TOLKIEN_TYPES["ELIF"], "elif"),
     "while": Tolkien(TOLKIEN_TYPES["WHILE"], "while"),
     "arburz": Tolkien(TOLKIEN_TYPES["WHILE"], "arburz"),  # Alternative for "while"
@@ -160,8 +159,10 @@ class Lexer:
                 self.advance()
                 if self.current_char == "=":
                     self.advance()
-                    return Tolkien(TOLKIEN_TYPES["EQ"], "==")  # Equality check
-                return Tolkien(TOLKIEN_TYPES["EQUALS"], "=")  # Assignment operator
+                    # Equality check
+                    return Tolkien(TOLKIEN_TYPES["EQ"], "==")
+                # Assignment operator
+                return Tolkien(TOLKIEN_TYPES["EQUALS"], "=")
 
             if self.current_char == "!":
                 self.advance()

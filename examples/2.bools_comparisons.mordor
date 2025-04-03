@@ -1,0 +1,12 @@
+print("Demonstrate: true or false == true");
+print(true or false == true);
+print("Demonstrate: false != true");
+print(false != true);
+print("Demonstrate: 5 > 3");
+print(5 > 3);
+print("Demonstrate: (5 + 2) <= (10 - 3)");
+print((5 + 2) <= (10 - 3));
+print("Demonstrate: (10 / 2) == 51");
+print((10 / 2) == 51);
+print("Demonstrate: goth agh goth (true and true)");
+print(goth agh goth);

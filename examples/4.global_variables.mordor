@@ -1,0 +1,4 @@
+x = "Mordor";
+y = 10000;
+
+print(x + " has " + y + " orcs at the Black Gate");

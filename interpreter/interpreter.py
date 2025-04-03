@@ -128,7 +128,8 @@ class Interpreter:
         if node.op == "not":
             return not operand_value
         elif node.op == "-":
-            return -operand_value
+            # Negation of the number
+            return -operand_value  
         else:
             raise Exception(f"Unknown unary operator: {node.op}")
 

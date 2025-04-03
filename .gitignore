@@ -2,3 +2,4 @@ abstract_syntax_tree/__pycache__/
 interpreter/__pycache__/
 lexer/__pycache__/
 parser/__pycache__/
+.pyc

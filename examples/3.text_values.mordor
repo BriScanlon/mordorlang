@@ -1,0 +1,16 @@
+print("10" + "corgis");
+print("Hello" + " " + "World");
+print("foo" + "bar" == "foobar");
+print(10 + " apples");
+print("Hello" + " " + "World");
+print("foo" + "bar" == "foobar");
+print("10 corgis" != "10" + "corgis");
+print(!goth);
+print("Total: " + 5 + " apples");
+print("hello" == "hello" agh true);
+print("Sum is " + (5 + 10));
+print(-5 + 3);
+print(true agh false or true);
+print(10 / 2 >= 5);
+print(("Total: " + (5 * 2)) == "Total: 10");
+print(goth agh burzum);
