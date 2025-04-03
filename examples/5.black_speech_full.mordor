@@ -8,7 +8,7 @@ arburz (orcs < 10000) {
         krimp("We have an Orc army worthy of the Eye! orcs = " + orcs);
         gul (humans > 10000) {
             krimp("Humans Beat Orcs");
-        } gul-nakh (humans == 10000) {
+        } guulnakh (humans == 10000) {
             krimp("It's a draw!");
         } skai {
             arburz (humans < 10001) {
