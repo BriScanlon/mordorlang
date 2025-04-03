@@ -53,7 +53,7 @@ You can use either the standard keywords or their Black Speech alternatives. For
 | Standard  | Black Speech |
 | --------- | ------------ |
 | if        | gul          |
-| elif      | gul-nakh     |
+| elif      | guulnakh     |
 | else      | skai         |
 | while     | arburz       |
 | print     | krimp        |
