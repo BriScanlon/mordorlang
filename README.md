@@ -57,7 +57,6 @@ You can use either the standard keywords or their Black Speech alternatives. For
 | else      | skai         |
 | while     | arburz       |
 | print     | krimp        |
-| fun       | fun          |
 | return    | zagh         |
 | and       | agh          |
 | or        | urz          |
